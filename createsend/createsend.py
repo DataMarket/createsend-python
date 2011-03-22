@@ -5,8 +5,7 @@ import base64
 from urlparse import urlparse
 from utils import json_to_py, get_faker
 
-__version_info__ = ('0', '1', '0')
-__version__ = '.'.join(__version_info__)
+__version__ = '0.1.0'
 
 class CreateSendError(Exception):
   """Represents a CreateSend API error and contains specific data about the error."""
