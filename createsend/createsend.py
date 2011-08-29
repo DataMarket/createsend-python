@@ -7,7 +7,7 @@ from utils import json_to_py, get_faker
 
 __version__ = '0.1.0'
 
-class CreateSendError(Exception):
+class CreateSendError(StandardError):
   """Represents a CreateSend API error and contains specific data about the error."""
   def __init__(self, data):
     self.data = data
@@ -16,12 +16,12 @@ class CreateSendError(Exception):
     extra = ("\nExtra result data: %s" % self.data.ResultData) if hasattr(self.data, 'ResultData') else ""
     return "The CreateSend API responded with the following error - %s: %s%s" % (self.data.Code, self.data.Message, extra)
 
-class ClientError(Exception): pass
-class ServerError(Exception): pass
+class ClientError(StandardError): pass
+class ServerError(StandardError): pass
 class BadRequest(CreateSendError): pass
 class Unauthorized(CreateSendError): pass
 class NotFound(ClientError): pass
-class Unavailable(Exception): pass
+class Unavailable(StandardError): pass
 
 class CreateSendBase(object):
   def __init__(self):
@@ -48,7 +48,7 @@ class CreateSendBase(object):
       # Check that the actual url which would be requested matches self.faker.url. 
       actual_url = "http://%s%s" % (parsed_base_uri.netloc, self.build_url(parsed_base_uri, path, params))
       if self.faker.url != actual_url:
-        raise Exception("Faker's expected URL (%s) doesn't match actual URL (%s)" % (self.faker.url, actual_url))
+        raise StandardError("Faker's expected URL (%s) doesn't match actual URL (%s)" % (self.faker.url, actual_url))
       data = self.faker.open() if self.faker else ''
       status = self.faker.status if (self.faker and self.faker.status) else 200
       return self.handle_response(status, data)
